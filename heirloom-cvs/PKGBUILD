@@ -1,6 +1,6 @@
 # Maintainer: aksr <aksr at t-com dot me>
-# Contributor: Jens Staal <staal1978 at gmail dot com>
 # Contributor: Sascha Biermmanns <saschakb at gmail dot com>
+# Contributor: Jens Staal <staal1978 at gmail dot com>
 
 pkgname=heirloom-cvs
 pkgver=2016.04.05
