@@ -6,7 +6,7 @@
 pkgname=heirloom-doctools-cvs
 pkgver=2016.04.05
 pkgrel=1
-pkgdesc="The Heirloom Documentation Tools consist of a modern roff suite."
+pkgdesc="Utilities to format manual pages and other documents for output on terminals and printers."
 arch=('i686' 'x86_64')
 url="http://heirloom.sourceforge.net/doctools.html"
 license=('custom:"berkeley"' 'custom:"caldera"' 'custom:"lucent"' 'custom:"opensolaris"' 'LGPL2.1' 'LPPL')

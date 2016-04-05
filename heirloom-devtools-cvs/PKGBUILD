@@ -7,7 +7,7 @@
 pkgname=heirloom-devtools-cvs
 pkgver=2016.04.05
 pkgrel=1
-pkgdesc="The Heirloom Development tools (yacc, lex, make ...) derived from original UNIX tools."
+pkgdesc="Collection of POSIX standard development utilities."
 arch=('i686' 'x86_64')
 url="http://heirloom.sourceforge.net/devtools.html"
 license=('custom:"berkeley"' 'custom:"caldera"' 'custom:"opensolaris"')
