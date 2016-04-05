@@ -1,0 +1,52 @@
+# Maintainer: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
+
+pkgname=carla-git
+pkgver=1.9.6.r471.g867d937
+pkgrel=1
+pkgdesc="Audio Plugin Host"
+arch=('i686' 'x86_64')
+url="http://kxstudio.sf.net/carla"
+license=('GPL2')
+depends=('clthreads' 'clxclient' 'fftw' 'file' 'fluidsynth' 'glu' 'liblo' 'libpng12' 'linuxsampler-svn' 'mxml' 'ntk-git' 'projectm' 'python' 'zita-convolver' 'zita-resampler' 'zlib')
+makedepends=('gtk2' 'gtk3' 'pygtk' 'python-pyliblo' 'python-pyqt4' 'python-pyqt5' 'python-rdflib' 'qt4' 'qt5-base' 'zynaddsubfx-git')
+optdepends=(
+  'gtk2: LV2 GTK2 UI support'
+  'gtk3: LV2 GTK3 UI support'
+  'pygtk: NekoFilter UI'
+  'python-pyliblo: OSC support'
+  'python-rdflib: LADSPA-RDF support'
+  'qt4: LV2 QT4 UI support'
+  'qt5-base: LV2 QT5 UI support'
+  'zynaddsubfx-git: ZynAddSubFX banks'
+)
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=("${pkgname}"::'git://github.com/falkTX/Carla.git')
+md5sums=('SKIP')
+install="${pkgname}.install"
+_branch=master
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  git checkout ${_branch} --quiet
+  ( set -o pipefail
+    git describe --long --tags 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+prepare() {
+  cd "${srcdir}/${pkgname}"
+  git checkout ${_branch}
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  make EXPERIMENTAL_PLUGINS=true
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  make EXPERIMENTAL_PLUGINS=true DESTDIR="${pkgdir}/" PREFIX=/usr install
+}
+

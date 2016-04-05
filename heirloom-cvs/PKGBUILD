@@ -1,0 +1,54 @@
+# Maintainer: aksr <aksr at t-com dot me>
+# Contributor: Jens Staal <staal1978 at gmail dot com>
+# Contributor: Sascha Biermmanns <saschakb at gmail dot com>
+
+pkgname=heirloom-cvs
+pkgver=2016.04.05
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc="The Heirloom Toolchest of standard UNIX utilities, derived from original UNIX tools."
+url="http://heirloom.sourceforge.net/tools.html"
+license=('custom' 'custom:"lucent"' 'custom:"opensolaris"' 'GPL2' 'LGPL2.1')
+depends=('heirloom-devtools-cvs' 'heirloom-sh-cvs')
+makedepends=('bc' 'cvs')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+options=(!emptydirs)
+source=('000-config.diff' '001-staticdep.diff' '002-nowhat.diff' 'makefile.patch')
+sha512sums=('0b38994e0ee0c8c293f879d12790fe3af33a5e1e3092a86caab7178c0b136da18abb51f77904520b94908e2dbfd5b034fd086cd3ba0e378be33d36ddcf1b4fde'
+            'f01ec9d2b3b279ed4606a16f7dfdaaf4894b9cd00dbfbf7b8f0ae455f135d3a3c726677bf75f131a051190ea6628f16b1ad1d011e4fdf9bbc7d8cbcb5fb8dc34'
+            '8584e6860a925dda1a707c4a37df2dee79ec108d91364446aa8a05226bd7624fc9457617d419fd8fb22fd144eecd59321ddef1b2b3bc8c73dbc3a4bd1016c41f'
+            '1f7da88de9fcc4016c92e410fce5f580cd9ee8a80643b8f02ee4a783a5883d088c5ac439a17a2a30d2768c73a83414cfc8cf9a743f935eefce6720a59688b5cf')
+
+_hmake() {
+  env PATH="/opt/heirloom/bin:$PATH" MAKEFLAGS="" make "$@"
+}
+
+pkgver() {
+  date +%Y.%m.%d
+}
+
+prepare() {
+  [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
+  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
+  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom co -P heirloom
+  cd "${pkgname%-*}"
+  patch -Np1 -i ${srcdir}/000-config.diff
+  patch -Np1 -i ${srcdir}/001-staticdep.diff
+  patch -Np1 -i ${srcdir}/002-nowhat.diff
+  patch makefile -i ${srcdir}/makefile.patch
+}
+
+build() {
+  cd "${pkgname%-*}"
+  make -j1
+}
+
+package() {
+  cd "${pkgname%-*}"
+  make ROOT="${pkgdir}" install
+  install -Dm0644 LICENSE/LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+  install -m0644 LICENSE/LUCENT ${pkgdir}/usr/share/licenses/${pkgname}/LUCENT
+  install -m0644 LICENSE/OPENSOLARIS.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/OPENSOLARIS
+}
+

@@ -1,0 +1,4 @@
+1c1
+< SHELL = /sbin/sh
+---
+> SHELL = /opt/heirloom/bin/sh

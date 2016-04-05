@@ -1,0 +1,45 @@
+# Maintainer: aksr <aksr at t-com dot me>
+# Contributor: Jens Staal <staal1978 at gmail dot com>
+# Contributor: Sascha Biermmanns <saschakb at gmail dot com>
+# Contributor: Osmiy
+# Contributor: lavandero
+
+pkgname=heirloom-devtools-cvs
+pkgver=2016.04.05
+pkgrel=1
+pkgdesc="The Heirloom Development tools (yacc, lex, make ...) derived from original UNIX tools."
+arch=('i686' 'x86_64')
+url="http://heirloom.sourceforge.net/devtools.html"
+license=('custom:"berkeley"' 'custom:"caldera"' 'custom:"opensolaris"')
+depends=('gcc-libs' 'heirloom-sh-cvs')
+makedepends=('cvs')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=('000-config.diff')
+sha512sums=('738b382d063f8b68d331f8f1743681aa126d89c5f252a01667a7e3675231d7a3f91b0b0589cb674aad88ad5119dae359de43b162d37c09bd67ec624d234a2ae5')
+
+pkgver() {
+  date +%Y.%m.%d
+}
+
+prepare() {
+  [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
+  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
+  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom co -P heirloom-devtools
+  cd "${pkgname%-*}"
+  patch -Np1 -i ${srcdir}/000-config.diff
+}
+
+build() {
+  cd "${pkgname%-*}"
+  make
+}
+
+package() {
+  cd "${pkgname%-*}"
+  make ROOT="${pkgdir}" install
+  install -Dm644 LICENSE/BERKELEY.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/BERKELEY
+  install -m644 LICENSE/CALDERA.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/CALDERA
+  install -m644 LICENSE/OPENSOLARIS.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/OPENSOLARIS
+}
+
