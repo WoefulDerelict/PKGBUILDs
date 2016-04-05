@@ -29,9 +29,12 @@ pkgver() {
 }
 
 prepare() {
-  [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
+  cd ../
   cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
   cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom co -P heirloom
+  cd ${srcdir}
+  [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
+  [ -d "${pkgname%-*}" ] || cp -a ../"${pkgname%-*}" "${pkgname%-*}"
   cd "${pkgname%-*}"
   patch -Np1 -i ${srcdir}/000-config.diff
   patch -Np1 -i ${srcdir}/001-staticdep.diff
