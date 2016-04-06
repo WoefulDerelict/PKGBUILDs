@@ -5,7 +5,7 @@
   The Arch wiki article on creating packages (https://wiki.archlinux.org/index.php/creating_packages) and the PKGBUILD manual page (https://www.archlinux.org/pacman/PKGBUILD.5.html) should be used as primary references and will answer most questions.
 
 ### Table of Contents
-* **binutils**: Package description for 2.26-3 from the Core repo rolled forward to a more recent commit in the 2.26 branch which includes a patch for ar which rejects arcives with a zero-size file (https://sourceware.org/bugzilla/show_bug.cgi?id=19775). Patched ar is necessary when building herloom* packages.
+* **binutils**: Package description for 2.26-3 from the Core repo rolled forward to a more recent commit in the 2.26 branch which includes a patch for ar which rejects arcives with a zero-size file (https://sourceware.org/bugzilla/show_bug.cgi?id=19775). Patched ar is necessary when building the herloom-cvs package.
 * **cadence-git**: Customized recipe for building cadence from the master branch at github. Optional dependencies are clearer and package versioning is more conducive to detecting updates than the AUR package which abuses the epoch variable.
 * **carla-git**: Reworked PKGBUILD from the AUR that more accurately represents the software's dependencies.
 * **heirloom-cvs**: Package description for the Heirloom Toolchest that has been modified to isolate the package's files in more self-contained location: (/opt/heirloom). pkgver() added utilizing the date fallback as CVS provides no satisfactory method of deriving a package version from the repository data. Package licences were edited to include ALL of the licences the software ships with.
