@@ -1,7 +1,7 @@
 # Maintainer: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
 
 pkgname=carla-git
-pkgver=1.9.6.r471.g867d937
+pkgver=1.9.6.r474.g5c2b9dd
 pkgrel=1
 pkgdesc="Audio Plugin Host"
 arch=('i686' 'x86_64')
