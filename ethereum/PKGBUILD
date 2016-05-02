@@ -1,0 +1,78 @@
+# Maintainer: Ordoe ordoe <aur@cach.co>
+# Contributor: Andy Weidenbaum <archbaum@gmail.com>
+
+pkgname=ethereum
+pkgver=1.2.4
+pkgrel=1
+pkgdesc="Decentralised consensus-based deterministic transaction resolution platform (C++ toolkit, full webthree-umbrella)"
+arch=('i686' 'x86_64')
+url="https://github.com/ethereum/webthree-umbrella"
+license=('MIT, GPL3')
+depends=('argtable'
+         'boost'
+         'boost-libs'
+         'curl'
+         'crypto++'
+         'gmp'
+         'gperftools'
+         'jsoncpp'
+         'leveldb'
+         'libedit'
+         'libjson-rpc-cpp-git'
+         'libmicrohttpd'
+         'miniupnpc'
+         'ncurses'
+         'libcl'
+         'llvm'
+         'opencl-headers'
+         'openssl'
+         'python2'
+         'qt5-base'
+         'qt5-declarative'
+         'qt5-quick1'
+         'qt5-quickcontrols'
+         'qt5-webengine'
+         'qt5-webkit'
+         'qt5-graphicaleffects'
+         'readline'
+         'scons'
+         'snappy'
+         'v8')
+makedepends=('autoconf'
+             'automake'
+             'clang'
+             'cmake'
+             'gcc'
+             'git'
+             'libtool'
+             'yasm')
+provides=("${pkgname}")
+conflicts=("${pkgname}-git")
+source=("${pkgname}::git+https://github.com/ethereum/webthree-umbrella")
+sha512sums=('SKIP')
+
+prepare() {
+  cd "${pkgname}"
+  git checkout release
+  git pull
+  git checkout v${pkgver}
+  git submodule update --init --recursive
+}
+
+build() {
+  cd "${pkgname}"
+  [ -d build ] || mkdir -p build && pushd build
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release
+  make
+  popd
+}
+
+package() {
+  cd "${pkgname}"
+  make DESTDIR="${pkgdir}" install -C build
+
+  find "${pkgdir}" -type d -name .git -exec rm -r '{}' +
+  find "${pkgdir}" -type f -name .gitignore -exec rm -r '{}' +
+}

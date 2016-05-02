@@ -1,0 +1,15 @@
+# Maintainer: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+
+pkgname=libtinfo5
+pkgver=5
+pkgrel=1
+pkgdesc="symlink to ncurses for use in cuda and other packages (legacy)"
+arch=('any')
+url="http://www.gnu.org/software/ncurses/"
+license=('MIT')
+depends=('ncurses5-compat-libs')
+
+package() {
+  install -d "${pkgdir}"/usr/lib
+  ln -s /usr/lib/libncurses.so."${pkgver}" -T "${pkgdir}"/usr/lib/libtinfo.so."${pkgver}"
+}

@@ -1,0 +1,68 @@
+# Maintainer: Afri 5chdn <aur@cach.co>
+# Contributor: Andy Weidenbaum <archbaum@gmail.com>
+
+pkgname=mist
+pkgver=0.7.2
+_pkgver=${pkgver//./-}
+pkgrel=1
+pkgdesc="The Ethereum browser."
+arch=('i686' 'x86_64')
+url="https://github.com/ethereum/mist"
+license=('GPL3')
+depends=('gmp'
+         'leveldb'
+         'qt5-base'
+         'qt5-declarative'
+         'qt5-quickcontrols'
+         'qt5-webengine'
+         'readline')
+makedepends=('gendesk' 'setconf')
+optdepends=('ethereum: The cpp-ethereum commandline client.')
+provides=("${pkgname}")
+conflicts=("${pkgname}-git")
+source=("${pkgname}-${_pkgver}-32.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux32-${_pkgver}.zip"
+        "${pkgname}-${_pkgver}-64.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux64-${_pkgver}.zip"
+        "${pkgname}.png")
+sha512sums=('9cf981f0162da4e1b6cb21ee343d13e78f995d2c61635cfa85d9fa2507291eb8929137c62735b57fa2d0fc2e0dec9b86c4c84439fffa5cf5c68313926094ee85'
+            '6f1a4584bc6f3e49a5dc844fd7615afee955e6bd235dffdacfd21af25eeba99cbf4cf47b2505ec415398ad7f35f5967211bf3f8c9c60158dad63aa558045b2a3'
+            'a5b3b675e713b6b7bf00008ec784495b268d8a18061d57f9a1a58a8f18cb1c0904b602d9d31b59d8b2be1c3afb92284bfb6fc5cc6c35650e5a0b3dffaa0211af')
+
+package() {
+  _arch="32"
+  if [ "${CARCH}" = "x86_64" ]; then
+    _arch="64"
+  fi
+
+  [ -f mist.desktop ] && rm mist.desktop
+  gendesk $startdir/PKGBUILD
+  # Set the name and path
+  setconf "${pkgname}.desktop" Name "Mist Browser"
+  setconf -a "${pkgname}.desktop" Path "/usr/lib/mist"
+
+  install -d "${pkgdir}/usr/lib/${pkgname}"
+  cp -a "${srcdir}/Ethereum-Wallet-linux${_arch}-${_pkgver}/." "${pkgdir}/usr/lib/${pkgname}"
+
+  install -d "${pkgdir}/usr/share/pixmaps"
+  install -Dm644 "${srcdir}/${pkgname}.png" "${pkgdir}/usr/share/pixmaps"
+  
+  install -d "${pkgdir}/usr/share/applications"
+  install -Dm644 "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications"
+
+  install -d "${pkgdir}/usr/bin"
+  ln -s "/usr/lib/${pkgname}/Ethereum-Wallet" "${pkgdir}/usr/bin/mist"
+  ln -s "/usr/lib/${pkgname}/resources/node/geth/geth" "${pkgdir}/usr/bin/geth"
+
+  install -d "${pkgdir}/usr/lib"
+  ln -s "/usr/lib/${pkgname}/libnode.so" "${pkgdir}/usr/lib/libnode.so"
+
+  ln -sf "/usr/lib/libgcrypt.so.11" "${pkgdir}/usr/lib/${pkgname}/libgcrypt.so.11"
+  ln -sf "/usr/lib/libnotify.so.4" "${pkgdir}/usr/lib/${pkgname}/libnotify.so.4"
+
+  rm "${pkgdir}/usr/lib/${pkgname}/LICENSE"
+
+  find "${pkgdir}" -type d -exec chmod 755 {} +
+  find "${pkgdir}" -type f -exec chmod 644 {} +
+  chmod 755 "${pkgdir}/usr/lib/${pkgname}/Ethereum-Wallet"
+  chmod 755 "${pkgdir}/usr/lib/${pkgname}/libnode.so"
+  chmod 755 "${pkgdir}/usr/lib/${pkgname}/resources/node/geth/geth"
+}
