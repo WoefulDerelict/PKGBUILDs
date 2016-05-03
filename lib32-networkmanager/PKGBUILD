@@ -71,7 +71,7 @@ build() {
     --with-kernel-firmware-dir=/usr/lib/firmware \
     --with-session-tracking=systemd \
     --with-modem-manager-1 \
-    --with-libaudit=no
+    --with-libaudit=no \
     --disable-static \
     --enable-more-warnings=no \
     --disable-wimax \
