@@ -2,7 +2,7 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=mist
-pkgver=0.7.2
+pkgver=0.7.4
 _pkgver=${pkgver//./-}
 pkgrel=1
 pkgdesc="The Ethereum browser."
@@ -23,8 +23,8 @@ conflicts=("${pkgname}-git")
 source=("${pkgname}-${_pkgver}-32.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux32-${_pkgver}.zip"
         "${pkgname}-${_pkgver}-64.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux64-${_pkgver}.zip"
         "${pkgname}.png")
-sha512sums=('9cf981f0162da4e1b6cb21ee343d13e78f995d2c61635cfa85d9fa2507291eb8929137c62735b57fa2d0fc2e0dec9b86c4c84439fffa5cf5c68313926094ee85'
-            '6f1a4584bc6f3e49a5dc844fd7615afee955e6bd235dffdacfd21af25eeba99cbf4cf47b2505ec415398ad7f35f5967211bf3f8c9c60158dad63aa558045b2a3'
+sha512sums=('738a4158f2e7b703ef5f21532e6a72b1b19091f56bc83a695cfa5d592d3b4bab7583ea99323b5d5bf684a320bd3b2c2669664af93a681a1fc748bdace3288033'
+            '0bd034a72bac4d0b7372ee56ba29bc68027563b12932b33ec31b29b45bdef6638b5bb8111aa851174783f41a1a0097c672e7a4c2552d6d7b2017d64b3039f620'
             'a5b3b675e713b6b7bf00008ec784495b268d8a18061d57f9a1a58a8f18cb1c0904b602d9d31b59d8b2be1c3afb92284bfb6fc5cc6c35650e5a0b3dffaa0211af')
 
 package() {

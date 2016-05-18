@@ -36,9 +36,10 @@ prepare() {
 build() {
   export PATH="${srcdir}/path:$PATH"
 
+  # Override the defaults with 32-bit options.
   export CC='gcc -m32'
   export CXX='g++ -m32'
-#  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+  export LDFLAGS='-m32'
   export PKG_CONFIG_LIBDIR='/usr/lib32/pkgconfig'
   export LIBRARY_PATH="/usr/lib32:$LIBRARY_PATH"
 
@@ -63,7 +64,6 @@ build() {
     --with-kernel-firmware-dir=/usr/lib/firmware \
     --with-session-tracking=systemd \
     --with-modem-manager-1 \
-    --with-libaudit=no \
     --disable-static \
     --enable-more-warnings=no \
     --disable-wimax \
