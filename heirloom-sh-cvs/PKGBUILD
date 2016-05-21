@@ -4,7 +4,7 @@
 # Contributor: Daniel Leidisch <spam at leidisch dot net>
 
 pkgname=heirloom-sh-cvs
-pkgver=2016.05.14
+pkgver=2016.05.21
 pkgrel=1
 pkgdesc="A portable variant of the traditional Unix shell, implements the SVR4/SVID3 level of the shell."
 arch=('i686' 'x86_64')

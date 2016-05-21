@@ -5,7 +5,7 @@
 # Contributor: Jens Staal <staal1978 at gmail dot com>
 
 pkgname=heirloom-devtools-cvs
-pkgver=2016.05.14
+pkgver=2016.05.21
 pkgrel=1
 pkgdesc="Collection of POSIX standard development utilities."
 arch=('i686' 'x86_64')
@@ -31,6 +31,7 @@ prepare() {
   [ -d "${pkgname%-*}" ] || cp -a ../"${pkgname%-*}" "${pkgname%-*}"
   cd "${pkgname%-*}"
   patch -Np1 -i ${srcdir}/000-config.diff
+  sed -i '53s/auto//' make/bsd/bsd.cc 
 }
 
 build() {
