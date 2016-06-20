@@ -2,14 +2,15 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=mist
-pkgver=0.7.4
+pkgver=0.7.5
 _pkgver=${pkgver//./-}
 pkgrel=1
 pkgdesc="The Ethereum browser."
 arch=('i686' 'x86_64')
 url="https://github.com/ethereum/mist"
 license=('GPL3')
-depends=('gmp'
+depends=('gconf'
+         'gmp'
          'leveldb'
          'qt5-base'
          'qt5-declarative'
@@ -20,12 +21,12 @@ makedepends=('gendesk' 'setconf')
 optdepends=('ethereum: The cpp-ethereum commandline client.')
 provides=("${pkgname}")
 conflicts=("${pkgname}-git")
-source=("${pkgname}-${_pkgver}-32.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux32-${_pkgver}.zip"
-        "${pkgname}-${_pkgver}-64.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux64-${_pkgver}.zip"
-        "${pkgname}.png")
-sha512sums=('23fdf319cf2cf731644b3d7a0d1e34d8a8a59178d2817647a4ddadef64c80f6d608387141594fc5ab76599a9fad37bc9e49fdb4e4b624bcc798904b127c6c703'
-            '0bd034a72bac4d0b7372ee56ba29bc68027563b12932b33ec31b29b45bdef6638b5bb8111aa851174783f41a1a0097c672e7a4c2552d6d7b2017d64b3039f620'
-            'a5b3b675e713b6b7bf00008ec784495b268d8a18061d57f9a1a58a8f18cb1c0904b602d9d31b59d8b2be1c3afb92284bfb6fc5cc6c35650e5a0b3dffaa0211af')
+source=("${pkgname}.png")
+sha512sums=('a5b3b675e713b6b7bf00008ec784495b268d8a18061d57f9a1a58a8f18cb1c0904b602d9d31b59d8b2be1c3afb92284bfb6fc5cc6c35650e5a0b3dffaa0211af')
+sha512sums_i686=('b2b4dd24683c7e7c18e86ceeafc0e134b535789fef0bb4da4226bcbf5ad3b5330a197413e8c4d552b7862b4301eae87c092d7f855e591da04a353e471db6519a')
+sha512sums_x86_64=('5bb06868639b63e568148b0636334859549eccfe1ecc4bc45278454e13effe21f0742d47697a08abd034e285e8ea60b50166f01ff78b4f728a439d712f5f2758')
+source_i686=("${pkgname}-${_pkgver}-32.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux32-${_pkgver}.zip")
+source_x86_64=("${pkgname}-${_pkgver}-64.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux64-${_pkgver}.zip")
 
 package() {
   _arch="32"
