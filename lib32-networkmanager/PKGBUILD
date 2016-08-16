@@ -8,9 +8,9 @@
 
 pkgbase=lib32-networkmanager
 pkgname=(lib32-networkmanager lib32-libnm-glib)
-pkgver=1.2.2
+pkgver=1.2.5dev+5+g99e34d7
 pkgrel=1
-pkgdesc="Network Management daemon (32-bit)"
+pkgdesc="Network connection manager and user applications (32-bit)"
 arch=(x86_64)
 license=(GPL2 LGPL2.1)
 url="http://www.gnome.org/projects/NetworkManager/"
@@ -20,17 +20,23 @@ makedepends=(intltool dhclient iptables gobject-introspection gtk-doc lib32-blue
              wpa_supplicant lib32-libsoup lib32-systemd lib32-libgudev lib32-libmm-glib rp-pppoe
              lib32-libnewt lib32-libndp lib32-libteam vala perl-yaml python-gobject networkmanager)
 checkdepends=(libx11 python-dbus)
-source=(https://download.gnome.org/sources/NetworkManager/${pkgver:0:3}/NetworkManager-$pkgver.tar.xz
+_commit=99e34d757967efdee5945ee3467fcfc380767699
+source=("git://anongit.freedesktop.org/NetworkManager/NetworkManager#commit=$_commit"
         NetworkManager.conf)
-sha256sums=('41d8082e027f58bb5fa4181f93742606ab99c659794a18e2823eff22df0eecd9'
-            '452e4f77c1de92b1e08f6f58674a6c52a2b2d65b7deb0ba436e9afa91ee15103')
+sha256sums=('SKIP'
+            '67f112c1ac8ee3726eb229f5cd783de19f09cc252af49e157343d82b324b923f')
 
 prepare() {
-  cd NetworkManager-$pkgver
+  cd NetworkManager
 
   2to3 -w libnm src tools
 
   NOCONFIGURE=1 ./autogen.sh
+}
+
+pkgver() {
+  cd NetworkManager
+  git describe | sed 's/-dev/dev/;s/-/+/g'
 }
 
 build() {
@@ -39,11 +45,11 @@ build() {
   # Override the defaults with 32-bit options.
   export CC='gcc -m32'
   export CXX='g++ -m32'
-  export LDFLAGS='-m32'
+  export LDFLAGS+=' -m32'
   export PKG_CONFIG_LIBDIR='/usr/lib32/pkgconfig'
   export LIBRARY_PATH="/usr/lib32:$LIBRARY_PATH"
 
-  cd NetworkManager-$pkgver
+  cd NetworkManager
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
@@ -77,7 +83,7 @@ build() {
 }
 
 check() {
-  cd NetworkManager-$pkgver
+  cd NetworkManager
   make -k check
 }
 
@@ -86,7 +92,7 @@ package_lib32-networkmanager() {
            lib32-libnewt lib32-libndp lib32-libteam networkmanager)
   optdepends=('lib32-bluez: Bluetooth support')
 
-  cd NetworkManager-$pkgver
+  cd NetworkManager
   make DESTDIR="$pkgdir" install
   make DESTDIR="$pkgdir" -C libnm uninstall
   make DESTDIR="$pkgdir" -C libnm-glib uninstall
@@ -107,7 +113,7 @@ package_lib32-libnm-glib() {
   install -d "$pkgdir/usr/lib32"
   mv pkgconfig "$pkgdir/usr/lib32"
 
-  cd NetworkManager-$pkgver
+  cd NetworkManager
   make DESTDIR="$pkgdir" -C libnm install
   make DESTDIR="$pkgdir" -C libnm-util install
   make DESTDIR="$pkgdir" -C libnm-glib install

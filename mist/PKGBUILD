@@ -2,7 +2,7 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=mist
-pkgver=0.7.5
+pkgver=0.8.1
 _pkgver=${pkgver//./-}
 pkgrel=1
 pkgdesc="The Ethereum browser."
@@ -23,8 +23,8 @@ provides=("${pkgname}")
 conflicts=("${pkgname}-git")
 source=("${pkgname}.png")
 sha512sums=('a5b3b675e713b6b7bf00008ec784495b268d8a18061d57f9a1a58a8f18cb1c0904b602d9d31b59d8b2be1c3afb92284bfb6fc5cc6c35650e5a0b3dffaa0211af')
-sha512sums_i686=('b2b4dd24683c7e7c18e86ceeafc0e134b535789fef0bb4da4226bcbf5ad3b5330a197413e8c4d552b7862b4301eae87c092d7f855e591da04a353e471db6519a')
-sha512sums_x86_64=('5bb06868639b63e568148b0636334859549eccfe1ecc4bc45278454e13effe21f0742d47697a08abd034e285e8ea60b50166f01ff78b4f728a439d712f5f2758')
+sha512sums_i686=('e58305a681cb0e46c5e56b84975b76996e2900504cba7f971dbfd7241043cd20e984b22718a579e6759276040462749af82ef4281fc15979a7f810e979b4d79e')
+sha512sums_x86_64=('8ac5effcd007920bc66467adc023bb30cd241fa0488ca5a84db6819632709cbf5a4ded849aa6d8d56193772c12b5bafafe3b33f6b03d18270dd7a4c97ac889ca')
 source_i686=("${pkgname}-${_pkgver}-32.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux32-${_pkgver}.zip")
 source_x86_64=("${pkgname}-${_pkgver}-64.zip::https://github.com/ethereum/${pkgname}/releases/download/${pkgver}/Ethereum-Wallet-linux64-${_pkgver}.zip")
 
