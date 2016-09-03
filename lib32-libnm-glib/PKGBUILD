@@ -1,30 +1,34 @@
-# $Id$
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Maintainer: Jan de Groot <jgc@archlinxu.org>
+# Maintainer: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+# Contributor: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinxu.org>
 # Contributor: Wael Nasreddine <gandalf@siemens-mobiles.org>
 # Contributor: Tor Krill <tor@krill.nu>
 # Contributor: Will Rea <sillywilly@gmail.com>
 # Contributor: Valentine Sinitsyn <e_val@inbox.ru>
 
-pkgbase=lib32-networkmanager
-pkgname=(lib32-networkmanager lib32-libnm-glib)
-pkgver=1.2.5dev+5+g99e34d7
+pkgname=(lib32-libnm-glib)
+pkgver=1.4.1dev+15+g0d23ffd
 pkgrel=1
-pkgdesc="Network connection manager and user applications (32-bit)"
+pkgdesc="NetworkManager library (32-bit)"
 arch=(x86_64)
 license=(GPL2 LGPL2.1)
 url="http://www.gnome.org/projects/NetworkManager/"
 _pppver=2.4.7
-makedepends=(intltool dhclient iptables gobject-introspection gtk-doc lib32-bluez-libs
-             "ppp=$_pppver" modemmanager lib32-dbus-glib iproute2 lib32-nss lib32-polkit
-             wpa_supplicant lib32-libsoup lib32-systemd lib32-libgudev lib32-libmm-glib rp-pppoe
-             lib32-libnewt lib32-libndp lib32-libteam vala perl-yaml python-gobject networkmanager)
+depends=(lib32-dbus-glib lib32-jansson lib32-libdbus lib32-libgudev lib32-nss lib32-util-linux libnm-glib)
+makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool
+             iproute2 iptables lib32-libmm-glib lib32-libndp lib32-libnewt
+             lib32-libsoup lib32-libteam lib32-polkit lib32-systemd modemmanager 
+             perl-yaml "ppp=$_pppver" python-gobject rp-pppoe vala wpa_supplicant)
 checkdepends=(libx11 python-dbus)
-_commit=99e34d757967efdee5945ee3467fcfc380767699
-source=("git://anongit.freedesktop.org/NetworkManager/NetworkManager#commit=$_commit"
-        NetworkManager.conf)
-sha256sums=('SKIP'
-            '67f112c1ac8ee3726eb229f5cd783de19f09cc252af49e157343d82b324b923f')
+_commit=0d23ffdb6bb2cd3b1e68b8744a737050d443b234
+source=("git://anongit.freedesktop.org/NetworkManager/NetworkManager#commit=$_commit")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd NetworkManager
+  git describe | sed 's/-dev/dev/;s/-/+/g'
+}
 
 prepare() {
   cd NetworkManager
@@ -32,11 +36,6 @@ prepare() {
   2to3 -w libnm src tools
 
   NOCONFIGURE=1 ./autogen.sh
-}
-
-pkgver() {
-  cd NetworkManager
-  git describe | sed 's/-dev/dev/;s/-/+/g'
 }
 
 build() {
@@ -89,32 +88,7 @@ check() {
   make -k check
 }
 
-package_lib32-networkmanager() {
-  depends=(lib32-libnm-glib iproute2 lib32-polkit wpa_supplicant lib32-libsoup lib32-libmm-glib
-           lib32-libnewt lib32-libndp lib32-libteam networkmanager)
-  optdepends=('lib32-bluez: Bluetooth support')
-
-  cd NetworkManager
-  make DESTDIR="$pkgdir" install
-  make DESTDIR="$pkgdir" -C libnm uninstall
-  make DESTDIR="$pkgdir" -C libnm-glib uninstall
-  make DESTDIR="$pkgdir" -C libnm-util uninstall
-  make DESTDIR="$pkgdir" -C vapi uninstall
-
-  # Some stuff to move is left over
-  mv "$pkgdir/usr/lib32/pkgconfig" ..
-
-  # Remove conflicting files.
-  rm -rf "${pkgdir}"/{etc,var,usr/{bin,lib,include,share}}
-}
-
-package_lib32-libnm-glib() {
-  pkgdesc="NetworkManager library (32-bit)"
-  depends=(lib32-libgudev lib32-nss lib32-dbus-glib lib32-util-linux)
-
-  install -d "$pkgdir/usr/lib32"
-  mv pkgconfig "$pkgdir/usr/lib32"
-
+package() {
   cd NetworkManager
   make DESTDIR="$pkgdir" -C libnm install
   make DESTDIR="$pkgdir" -C libnm-util install

@@ -1,0 +1,55 @@
+# Maintainer: Ordoe ordoe <aur@cach.co>
+# Contributor: Andy Weidenbaum <archbaum@gmail.com>
+
+pkgname=cpp-ethereum-git
+pkgver=foundationwallet.r717.ged7a8a3
+pkgrel=1
+pkgdesc="Decentralised consensus-based deterministic transaction resolution platform (C++ toolkit, full webthree-umbrella)"
+arch=('i686' 'x86_64')
+url="https://github.com/ethereum/webthree-umbrella"
+license=('MIT, GPL3')
+depends=('boost' 'crypto++' 'leveldb' 'libcl' 'libmicrohttpd' 'libjson-rpc-cpp-git' 'miniupnpc' 'opencl-headers')
+makedepends=('cmake' 'git' 'yasm')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=("${pkgname}::git+https://github.com/ethereum/cpp-ethereum"
+        "deps::git+https://github.com/ethereum/cpp-dependencies"
+        "evmjit::git+https://github.com/ethereum/evmjit")
+sha512sums=('SKIP'
+            'SKIP'
+            'SKIP')
+_branch=master
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  git checkout ${_branch} --quiet
+  ( set -o pipefail
+    git describe --long --tags 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+prepare() {
+  cd "${pkgname}"
+  [[ -d build ]] || mkdir build
+  git checkout ${_branch}
+  git submodule init
+  git config submodule.deps.url "${srcdir}/deps"
+  git config submodule.evmjit.url "${srcdir}/evmjit"
+  git submodule update evmjit
+}
+
+build() {
+  cd "${pkgname}/build"
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr 
+  make
+}
+
+package() {
+  cd "${pkgname}"
+  make DESTDIR="${pkgdir}" install -C build
+
+#  find "${pkgdir}" -type d -name .git -exec rm -r '{}' +
+#  find "${pkgdir}" -type f -name .gitignore -exec rm -r '{}' +
+}
