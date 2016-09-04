@@ -1,9 +1,10 @@
 # Maintainer: Andy Weidenbaum <archbaum@gmail.com>
+# Contributor: Llewelyn Trahaearn <woefulderelict@gmail.com>
 # Contributor: Peter Spiess-Knafl <psk@autistici.org>
 # Contributor: Daniel Bomar <dbdaniel42@gmail.com>
 
 pkgname=libjson-rpc-cpp-git
-pkgver=0.7.0.r6.g4438459
+pkgver=0.7.0.r7.gd893ed2
 pkgrel=1
 pkgdesc="C++ framework for json-rpc 1.0 and 2.0"
 arch=('i686' 'x86_64')
