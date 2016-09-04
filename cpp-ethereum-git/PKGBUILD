@@ -2,7 +2,7 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=cpp-ethereum-git
-pkgver=foundationwallet.r717.ged7a8a3
+pkgver=r717.ged7a8a3
 pkgrel=1
 pkgdesc="Decentralised consensus-based deterministic transaction resolution platform (C++ toolkit, full webthree-umbrella)"
 arch=('i686' 'x86_64')
@@ -24,7 +24,7 @@ pkgver() {
   cd "${srcdir}/${pkgname}"
   git checkout ${_branch} --quiet
   ( set -o pipefail
-    git describe --long --tags 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    git describe --long --tags 2>/dev/null | sed 's/^foundationwallet.//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
   )
 }
@@ -37,12 +37,14 @@ prepare() {
   git config submodule.deps.url "${srcdir}/deps"
   git config submodule.evmjit.url "${srcdir}/evmjit"
   git submodule update evmjit
+  sed -i 's#EXACT REQUIRED#REQUIRED#g' "./cmake/EthDependencies.cmake"
 }
 
 build() {
   cd "${pkgname}/build"
   cmake .. \
-    -DCMAKE_INSTALL_PREFIX=/usr 
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLLVM_DIR=/usr/share/llvm/cmake
   make
 }
 
