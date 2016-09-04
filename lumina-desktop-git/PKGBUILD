@@ -1,0 +1,60 @@
+# Maintainer: Chad "crossroads1112" Sharp <crossroads1112 at riseup dot net>
+# Contributor: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+
+pkgname=lumina-desktop-git
+pkgver=r1670.33651dd
+pkgrel=1
+_dirname="${pkgname%%-*}"
+pkgdesc="A Lightweight QT5 Desktop for FreeBSD"
+arch=('x86_64' 'i686')
+url="https://lumina-desktop.org/"
+license=('BSD')
+depends=('fluxbox' 'oxygen' 'oxygen-icons' 'qt5-multimedia' 'xscreensaver')
+makedepends=('lsb-release' 'qt5-tools')
+optdepends=('acpi: backend for hardware monitoring.'
+            'alsa-utils: backend for audio control.'
+            'compton: Recommended compositor.'
+            'fluxmod-styles: Theme elements to improve the appearence of window decorations.'
+            'network-manager-applet: provides panel applet for managing network connections.'
+            'numlockx: backend for manipulating numlock state.'
+            'pavucontrol: Standalone mixer for PulseAudio.'
+            'xorg-xbacklight: backend to adjust screen brightness.'
+            'xterm: Terminal emulator.')
+provides=("${pkgname%-*}" "insight-fm")
+conflicts=("${pkgname%-*}" "insight-fm")
+source=("${pkgname%%-*}::git+https://github.com/trueos/lumina.git")
+sha512sums=('SKIP')
+_branch=master
+
+pkgver() {
+  cd $_dirname
+  git checkout ${_branch} --quiet
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+prepare() {
+  cd $_dirname
+  git checkout ${_branch}
+}
+
+build() {
+  cd $_dirname
+  find ${srcdir}/${_dirname} -name *.desktop -exec sed -i 's/usr\/local/usr/' {} \;
+  qmake-qt5 PREFIX="/usr" \
+            QT5LIBDIR=/usr/lib/qt \
+            QMAKE_CFLAGS_ISYSTEM= \
+            QMAKE_CFLAGS_RELEASE="${CFLAGS}"\
+            QMAKE_CXXFLAGS_RELEASE="${CXXFLAGS}"
+
+  make
+}
+
+package() {
+  cd $_dirname
+  make INSTALL_ROOT="${pkgdir}" install
+  mv "${pkgdir}"/usr/etc "${pkgdir}"/etc
+  install -Dm0644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
