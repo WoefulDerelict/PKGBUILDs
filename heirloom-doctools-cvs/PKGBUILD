@@ -17,10 +17,6 @@ conflicts=("${pkgname%-*}")
 source=('config.diff')
 sha512sums=('0898d6b3a137f2deb9c1c325165db399da73e193b469a0d8812337de7d7fdcd2581abedded7c9557c552a1970ae1badf7832ba335e69477ce7c66d03bcb023de')
 
-pkgver() {
-  date +%Y.%m.%d
-}
-
 prepare() {
   cd ../
   cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
@@ -30,6 +26,10 @@ prepare() {
   [ -d "${pkgname%-*}" ] || cp -a ../"${pkgname%-*}" "${pkgname%-*}"
   cd "${pkgname%-*}"
   patch -Np1 -i ${srcdir}/config.diff
+}
+
+pkgver() {
+  date +%Y.%m.%d
 }
 
 build() {

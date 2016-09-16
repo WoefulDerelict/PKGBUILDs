@@ -24,10 +24,6 @@ _hmake() {
   env PATH="/opt/heirloom/bin:$PATH" MAKEFLAGS="" make "$@"
 }
 
-pkgver() {
-  date +%Y.%m.%d
-}
-
 prepare() {
   cd ../
   cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
@@ -40,6 +36,10 @@ prepare() {
   patch -Np1 -i ${srcdir}/001-staticdep.diff
   patch -Np1 -i ${srcdir}/002-nowhat.diff
   patch makefile -i ${srcdir}/makefile.patch
+}
+
+pkgver() {
+  date +%Y.%m.%d
 }
 
 build() {

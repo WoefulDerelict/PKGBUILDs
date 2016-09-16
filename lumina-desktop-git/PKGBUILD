@@ -26,19 +26,18 @@ source=("${pkgname%%-*}::git+https://github.com/trueos/lumina.git")
 sha512sums=('SKIP')
 _branch=master
 
-pkgver() {
-  cd $_dirname
-  git checkout ${_branch} --quiet
-  ( set -o pipefail
-    git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-  )
-}
-
 prepare() {
   cd $_dirname
   git checkout ${_branch}
   git pull
+}
+
+pkgver() {
+  cd $_dirname
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
 }
 
 build() {
