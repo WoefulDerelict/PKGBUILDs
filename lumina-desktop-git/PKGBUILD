@@ -2,7 +2,7 @@
 # Contributor: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
 
 pkgname=lumina-desktop-git
-pkgver=r1670.33651dd
+pkgver=r1699.9f79342
 pkgrel=1
 _dirname="${pkgname%%-*}"
 pkgdesc="A Lightweight QT5 Desktop for FreeBSD"
@@ -38,6 +38,7 @@ pkgver() {
 prepare() {
   cd $_dirname
   git checkout ${_branch}
+  git pull
 }
 
 build() {
