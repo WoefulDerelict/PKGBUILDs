@@ -21,8 +21,6 @@ optdepends=('acpi: backend for hardware monitoring.'
             'pavucontrol: Standalone mixer for PulseAudio.'
             'xorg-xbacklight: backend to adjust screen brightness.'
             'xterm: Terminal emulator.')
-provides=("${pkgname}" "insight-fm")
-conflicts=("${pkgname}-git" "insight-fm")
 source=("https://github.com/trueos/lumina/archive/v${pkgver%p*}-${_patchrel}.tar.gz")
 sha512sums=('91affcb66250d2ba20e1aaf856d830d9e40f0325aaa5dfebd1e3518076028d3573ffd9e38ba794c892e1e2c7c1712fb75892e5084ef9bae496a21b057bb05bd1')
 

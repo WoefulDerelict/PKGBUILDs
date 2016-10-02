@@ -20,8 +20,8 @@ optdepends=('acpi: backend for hardware monitoring.'
             'pavucontrol: Standalone mixer for PulseAudio.'
             'xorg-xbacklight: backend to adjust screen brightness.'
             'xterm: Terminal emulator.')
-provides=("${pkgname%-*}" "insight-fm")
-conflicts=("${pkgname%-*}" "insight-fm")
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
 source=("${pkgname%%-*}::git+https://github.com/trueos/lumina.git")
 sha512sums=('SKIP')
 _branch=master
