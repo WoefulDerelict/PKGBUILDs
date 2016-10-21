@@ -2,10 +2,9 @@
 # Contributor: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
 
 pkgname=lumina-desktop
-pkgver=1.0.0p2
+pkgver=1.1.0
 pkgrel=1
-_patchrel=Release-p2
-_dirname="${pkgname%-*}-${pkgver%p*}-${_patchrel}"
+_dirname="${pkgname%-*}-${pkgver%p*}"
 pkgdesc="A Lightweight QT5 Desktop for FreeBSD"
 arch=('x86_64' 'i686')
 url="https://lumina-desktop.org/"
@@ -21,8 +20,8 @@ optdepends=('acpi: backend for hardware monitoring.'
             'pavucontrol: Standalone mixer for PulseAudio.'
             'xorg-xbacklight: backend to adjust screen brightness.'
             'xterm: Terminal emulator.')
-source=("https://github.com/trueos/lumina/archive/v${pkgver%p*}-${_patchrel}.tar.gz")
-sha512sums=('91affcb66250d2ba20e1aaf856d830d9e40f0325aaa5dfebd1e3518076028d3573ffd9e38ba794c892e1e2c7c1712fb75892e5084ef9bae496a21b057bb05bd1')
+source=("https://github.com/trueos/lumina/archive/v${pkgver}.tar.gz")
+sha512sums=('79b48e70fd7be3708966221c25025a8013a3ef96e00681056e99dfdd60809a3ff9d2048b3767d9fbc57c1c4f7e00fb36659cdca86fa41a322f125e9e061e88e0')
 
 build() {
   cd $_dirname
