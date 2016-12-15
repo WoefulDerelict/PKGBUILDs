@@ -1,5 +1,5 @@
-# Maintainer: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
-# Contributor: Llewelyn Trahaearn <woefulderelict@gmail.com>
+# Maintainer: Llewelyn Trahaearn <woefulderelict@gmail.com>
+# Contributor: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
 
 pkgname=carla-git
 pkgver=1.9.6.r496.ge07f144
