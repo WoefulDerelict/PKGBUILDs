@@ -3,7 +3,7 @@
 # Contributor: falkTX <falktx at gmail dot com>
 
 pkgname=cadence-git
-pkgver=r981.dea02f6
+pkgver=r990.92034ff
 pkgrel=1
 pkgdesc="JACK toolbox for audio production."
 arch=('i686' 'x86_64')
