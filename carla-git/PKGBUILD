@@ -2,14 +2,14 @@
 # Contributor: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
 
 pkgname=carla-git
-pkgver=1.9.6.r500.g0e81fd3
+pkgver=1.9.7.r6.g3075aa2c
 pkgrel=1
 pkgdesc="Audio Plugin Host"
 arch=('i686' 'x86_64')
 url="http://kxstudio.sf.net/carla"
 license=('GPL2')
 depends=('clthreads' 'clxclient' 'fftw' 'file' 'fluidsynth' 'glu' 'liblo' 'libpng12' 'linuxsampler' 'mxml' 'ntk-git' 'projectm' 'python' 'zita-convolver' 'zita-resampler' 'zlib')
-makedepends=('gtk2' 'gtk3' 'pygtk' 'python-pyliblo' 'python-pyqt4' 'python-pyqt5' 'python-rdflib' 'qt4' 'qt5-base' 'zynaddsubfx')
+makedepends=('gtk2' 'gtk3' 'python-pyliblo' 'python-pyqt4' 'python-pyqt5' 'python-rdflib' 'qt4' 'qt5-base' 'zynaddsubfx')
 optdepends=(
   'gtk2: LV2 GTK2 UI support'
   'gtk3: LV2 GTK3 UI support'
@@ -42,11 +42,11 @@ pkgver() {
 
 build() {
   cd "${pkgname}"
-  make EXPERIMENTAL_PLUGINS=true
+  make DEFAULT_QT=5 EXPERIMENTAL_PLUGINS=true
 }
 
 package() {
   cd "${pkgname}"
-  make EXPERIMENTAL_PLUGINS=true DESTDIR="${pkgdir}/" PREFIX=/usr install
+  make DEFAULT_QT=5 EXPERIMENTAL_PLUGINS=true DESTDIR="${pkgdir}/" PREFIX=/usr install
 }
 
