@@ -2,7 +2,7 @@
 # Contributor: cocreature <moritz.kiefer<at>purelyfunctional<dot>org>
 
 pkgname=carla-git
-pkgver=1.9.7.r10.g45f74421
+pkgver=1.9.7.r16.g5a95517b
 pkgrel=1
 pkgdesc="Audio Plugin Host"
 arch=('i686' 'x86_64')
