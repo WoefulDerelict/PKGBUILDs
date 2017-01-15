@@ -8,7 +8,7 @@ groups=('dlang' 'dlang-ldc')
 pkgver=1.1.0.beta3.r157.gbb3e1648
 epoch=1
 pkgrel=1
-pkgdesc="A D Compiler based on the LLVM Compiler Infrastructure including D runtime and libphobos2"
+pkgdesc="D compiler based on the LLVM project including runtime and library."
 arch=('i686' 'x86_64')
 url="https://github.com/ldc-developers/ldc"
 license=('BSD')
@@ -53,6 +53,7 @@ build() {
 }
 
 package_ldc() {
+  pkgdesc="D compiler based on the LLVM project."
   depends=('liblphobos' 'libconfig')
   backup=("etc/ldc2.conf")
   provides=("d-compiler")
@@ -76,6 +77,7 @@ package_ldc() {
 }
 
 package_liblphobos() {
+  pkgdesc="Runtime and Phobos library for the LLVM based D compiler."
   provides=("d-runtime" "d-stdlib")
   replaces=("liblphobos-devel")
   conflicts=("liblphobos-devel")
