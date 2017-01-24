@@ -4,7 +4,7 @@
 # Contributor: Jens Staal <staal1978 at gmail dot com>
 
 pkgname=heirloom-doctools-cvs
-pkgver=2016.05.21
+pkgver=2017.01.22
 pkgrel=1
 pkgdesc="Utilities to format manual pages and other documents for output on terminals and printers."
 arch=('i686' 'x86_64')

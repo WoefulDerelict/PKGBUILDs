@@ -5,7 +5,7 @@
 pkgbase=ldc
 pkgname=("${pkgbase}" 'liblphobos')
 groups=('dlang' 'dlang-ldc')
-pkgver=1.1.0.beta3.r157.gbb3e1648
+pkgver=1.1.0.beta3.r168.g1621bed1
 epoch=1
 pkgrel=1
 pkgdesc="D compiler based on the LLVM project including runtime and library."
@@ -15,7 +15,7 @@ license=('BSD')
 depends=('libconfig')
 makedepends=('git' 'cmake' 'llvm' 'dmd')
 #source=("git+$url#tag=v${pkgver}")
-_commit=bb3e16481c14cf2bf161d9ff0e396500ab373ddb
+_commit=1621bed1f445c384167b440befabcc1079671088
 source=("git+$url#tag=$_commit"
         "ldc2.conf"
        )
