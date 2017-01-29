@@ -19,7 +19,7 @@ _pppver=2.4.7
 makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool iproute2 iptables
              lib32-bluez-libs lib32-dbus-glib lib32-jansson lib32-libgudev lib32-libmm-glib
              lib32-libndp lib32-libnewt lib32-nss lib32-libsoup lib32-libteam lib32-polkit 
-             lib32-systemd libutil-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
+             lib32-systemd lib32-util-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
              rp-pppoe vala wpa_supplicant)
 checkdepends=(libx11 python-dbus)
 _commit=2554a8736d41e1091fb69a796a126f818873449b  # tags/1.6.0^0
@@ -39,8 +39,6 @@ pkgver() {
 }
 
 build() {
-  export PATH="${srcdir}/path:$PATH"
-
   # Modify environment to generate 32-bit ELF. Respects flags defined in makepkg.conf
   export CFLAGS="-m32 ${CFLAGS}"
   export CXXFLAGS="-m32 ${CXXFLAGS}"
@@ -142,7 +140,7 @@ check() {
 
 package_lib32-libnm() {
   pkgdesc="NetworkManager client library (32-bit)"
-  depends=(lib32-jansson lib32-libgudev lib32-nss libnm)
+  depends=(lib32-glib2 lib32-jansson lib32-libgudev lib32-nss lib32-util-linux libnm)
 
   mv libnm/* "$pkgdir"
 }
