@@ -1,0 +1,155 @@
+# Maintainer: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+# Contributor: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinxu.org>
+# Contributor: Wael Nasreddine <gandalf@siemens-mobiles.org>
+# Contributor: Tor Krill <tor@krill.nu>
+# Contributor: Will Rea <sillywilly@gmail.com>
+# Contributor: Valentine Sinitsyn <e_val@inbox.ru>
+
+pkgbase=lib32-networkmanager
+pkgname=(lib32-libnm lib32-libnm-glib)
+pkgver=1.6.0
+pkgrel=1
+pkgdesc="NetworkManager client libraries (32-bit)"
+arch=(x86_64)
+license=(GPL2 LGPL2.1)
+url="https://wiki.gnome.org/Projects/NetworkManager"
+_pppver=2.4.7
+makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool iproute2 iptables
+             lib32-bluez-libs lib32-dbus-glib lib32-jansson lib32-libgudev lib32-libmm-glib
+             lib32-libndp lib32-libnewt lib32-nss lib32-libsoup lib32-libteam lib32-polkit 
+             lib32-systemd libutil-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
+             rp-pppoe vala wpa_supplicant)
+checkdepends=(libx11 python-dbus)
+_commit=2554a8736d41e1091fb69a796a126f818873449b  # tags/1.6.0^0
+source=("git+https://anongit.freedesktop.org/git/NetworkManager/NetworkManager#commit=$_commit")
+sha256sums=('SKIP')
+
+prepare() {
+  mkdir -p install libnm{,-glib}/usr/lib32/{girepository-1.0,pkgconfig}
+
+  cd NetworkManager
+  NOCONFIGURE=1 ./autogen.sh
+}
+
+pkgver() {
+  cd NetworkManager
+  git describe | sed 's/-dev/dev/;s/-/+/g'
+}
+
+build() {
+  export PATH="${srcdir}/path:$PATH"
+
+  # Modify environment to generate 32-bit ELF. Respects flags defined in makepkg.conf
+  export CFLAGS="-m32 ${CFLAGS}"
+  export CXXFLAGS="-m32 ${CXXFLAGS}"
+  export LDFLAGS="-m32 ${LDFLAGS}"
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+#  export PKG_CONFIG_LIBDIR='/usr/lib32/pkgconfig'
+  export LIBRARY_PATH="/usr/lib32:$LIBRARY_PATH"
+
+  cd NetworkManager
+  ./configure \
+    --build=i686-pc-linux-gnu \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    runstatedir=/run \
+    --sbindir=/usr/bin \
+    --libdir=/usr/lib32 \
+    --libexecdir=/usr/lib/NetworkManager \
+    --disable-ifcfg-rh \
+    --disable-ifcfg-suse \
+    --disable-ifnet \
+    --disable-ifupdown \
+    --disable-lto \
+    --disable-more-warnings \
+    --disable-static \
+    --enable-bluez5-dun \
+    --enable-concheck \
+    --enable-config-plugin-ibft \
+    --enable-gtk-doc \
+    --enable-introspection \
+    --enable-json-validation \
+    --enable-ld-gc \
+    --enable-modify-system \
+    --enable-polkit \
+    --enable-polkit-agent \
+    --enable-teamdctl \
+    --enable-wifi \
+    --with-config-dhcp-default=dhclient \
+    --with-config-dns-rc-manager-default=resolvconf \
+    --with-config-logging-backend-default=journal \
+    --with-config-plugins-default=keyfile,ibft \
+    --with-crypto=nss \
+    --with-dbus-sys-dir=/usr/share/dbus-1/system.d \
+    --with-dhclient=/usr/bin/dhclient \
+    --with-dist-version="$pkgver-$pkgrel, Arch Linux" \
+    --with-dnsmasq=/usr/bin/dnsmasq \
+    --with-dnssec-trigger=/usr/lib/dnssec-trigger \
+    --with-hostname-persist=default \
+    --with-iptables=/usr/bin/iptables \
+    --with-kernel-firmware-dir=/usr/lib/firmware \
+    --with-libnm-glib \
+    --with-libsoup \
+    --with-modem-manager-1 \
+    --with-nmcli \
+    --with-nmtui \
+    --with-pppd-plugin-dir=/usr/lib/pppd/$_pppver \
+    --with-pppd=/usr/bin/pppd \
+    --with-resolvconf=/usr/bin/resolvconf \
+    --with-session-tracking=systemd \
+    --with-suspend-resume=systemd \
+    --with-system-ca-path=/etc/ssl/certs \
+    --with-systemd-journal \
+    --with-systemd-logind \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --with-udev-dir=/usr/lib/udev \
+    --with-wext \
+    --without-consolekit \
+    --without-dhcpcd \
+    --without-libaudit \
+    --without-netconfig \
+    --without-ofono \
+    --without-selinux
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+  
+  make DESTDIR="$srcdir/install" install
+
+  ### Split libnm
+
+  cd ../libnm
+  mv "$srcdir/install"/usr/lib32/girepository-1.0/NM-* usr/lib32/girepository-1.0
+  mv "$srcdir/install"/usr/lib32/libnm.* usr/lib32
+  mv "$srcdir/install"/usr/lib32/pkgconfig/libnm.pc usr/lib32/pkgconfig
+
+  ### Split libnm-glib
+
+  cd ../libnm-glib
+  mv "$srcdir/install"/usr/lib32/girepository-1.0/* usr/lib32/girepository-1.0
+  mv "$srcdir/install"/usr/lib32/libnm-* usr/lib32
+  mv "$srcdir/install"/usr/lib32/pkgconfig/* usr/lib32/pkgconfig
+}
+
+check() {
+  cd NetworkManager
+  make -k check
+}
+
+package_lib32-libnm() {
+  pkgdesc="NetworkManager client library (32-bit)"
+  depends=(lib32-jansson lib32-libgudev lib32-nss libnm)
+
+  mv libnm/* "$pkgdir"
+}
+
+package_lib32-libnm-glib() {
+  pkgdesc="NetworkManager client library (legacy, 32-bit)"
+  depends=(lib32-dbus-glib lib32-libnm libnm-glib)
+
+  mv libnm-glib/* "$pkgdir"
+}
