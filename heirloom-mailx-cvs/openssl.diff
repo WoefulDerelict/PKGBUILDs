@@ -1,6 +1,6 @@
 --- nail/openssl.c	2009-05-26 14:04:15.000000000 -0700
-+++ nail-patch/openssl.c	2017-01-30 14:25:21.543333163 -0800
-@@ -135,15 +135,7 @@
++++ nail-patch/openssl.c	2017-01-30 14:43:55.530452393 -0800
+@@ -135,15 +135,18 @@
  	char *cp;
  	int state = 0;
  
@@ -10,17 +10,6 @@
 -			fprintf(stderr, catgets(catd, CATSET, 245,
 -				"entropy daemon at \"%s\" not available\n"),
 -					cp);
--		} else
--			state = 1;
--	} else if ((cp = value("ssl-rand-file")) != NULL) {
-+	if ((cp = value("ssl-rand-file")) != NULL) {
- 		cp = expand(cp);
- 		if (RAND_load_file(cp, 1024) == -1) {
- 			fprintf(stderr, catgets(catd, CATSET, 246,
-@@ -162,6 +154,17 @@
- 			state = 1;
- 		}
- 	}
 +	#ifndef OPENSSL_NO_EGD
 +		else if ((cp = value("ssl-rand-egd")) != NULL) {
 +			cp = expand(cp);
@@ -30,11 +19,14 @@
 +						cp);
 +			} else
 +				state = 1;
-+		}
+ 		} else
+-			state = 1;
+-	} else if ((cp = value("ssl-rand-file")) != NULL) {
 +	#endif	
- 	return state;
- }
- 
++	if ((cp = value("ssl-rand-file")) != NULL) {
+ 		cp = expand(cp);
+ 		if (RAND_load_file(cp, 1024) == -1) {
+ 			fprintf(stderr, catgets(catd, CATSET, 246,
 @@ -216,19 +219,33 @@
  
  	cp = ssl_method_string(uhp);
