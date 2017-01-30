@@ -1,0 +1,47 @@
+# Maintainer: Llewelyn Trahaearn <woefulderelict [at] gmail [dot] com>
+# Contributor: aksr <aksr [at] t-com [dot] me>
+
+pkgname=heirloom-mailx-cvs
+pkgver=2017.01.30
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc="A mail user agent for Unix systems."
+url="http://heirloom.sourceforge.net/mailx.html"
+license=('custom')
+depends=('heirloom-cvs' 'krb5' 'openssl')
+makedepends=('cvs')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=('makefile.patch' 'man.diff' 'openssl.diff')
+sha512sums=('dc999ad9a6c5e8da49a93dcff92aa76e6505f607bb5ee646c38e69fa7cdc23eb51b67666e9d0f1cda343ca031cb6425308315fefb9466d716ddb7d2470834d89'
+            '191baab71251fe8537e4ba614552ad5ccc7a1f058c1fe4da9353398eb2cc255072962588c7092c1837e90e0c2075930cf2aa69a02760506989a66c568f3a43b9'
+            'c0c0a8724fe403c79d3c086c43b18b7485f400b22d26f4dbda327127e8dbf1fcda52bf501d6ccb3f1e0370ed1183c2e4bc5818d56fddd3064a70897eac8e03b3')
+
+prepare() {
+  cd ../
+  cvs -d:pserver:anonymous:@nail.cvs.sourceforge.net:/cvsroot/nail login
+  cvs -d:pserver:anonymous:@nail.cvs.sourceforge.net:/cvsroot/nail co nail
+  cd ${srcdir}
+  [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
+  [ -d "${pkgname%-*}" ] || cp -a ../nail "${pkgname%-*}"
+  cd "${pkgname%-*}"
+  patch -Np1 -i ${srcdir}/openssl.diff
+  patch -Np1 -i ${srcdir}/man.diff
+  patch Makefile -i ${srcdir}/makefile.patch
+}
+
+pkgver() {
+  date +%Y.%m.%d
+}
+
+build() {
+  cd "${pkgname%-*}"
+  make
+}
+
+package() {
+  cd "${pkgname%-*}"
+  make DESTDIR="${pkgdir}" install
+  install -Dm644 ${srcdir}/${pkgname%-*}/COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
+

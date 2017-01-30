@@ -1,10 +1,11 @@
-# Maintainer: aksr <aksr at t-com dot me>
+# Maintainer: Llewelyn Trahaearn <woefulderelict [at] gmail [dot] com>
+# Contributor: aksr <aksr [at] t-com [dot] me>
 # Contributor: itikhonov
-# Contributor: Sascha Biermmanns <saschakb at gmail dot com>
-# Contributor: Jens Staal <staal1978 at gmail dot com>
+# Contributor: Sascha Biermmanns <saschakb [at] gmail [dot] com>
+# Contributor: Jens Staal <staal1978 [at] gmail [dot] com>
 
 pkgname=heirloom-doctools-cvs
-pkgver=2017.01.22
+pkgver=2017.01.30
 pkgrel=1
 pkgdesc="Utilities to format manual pages and other documents for output on terminals and printers."
 arch=('i686' 'x86_64')

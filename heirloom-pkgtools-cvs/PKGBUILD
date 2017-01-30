@@ -2,26 +2,29 @@
 # Contributor: aksr <aksr [at] t-com [dot] me>
 # Contributor: Sascha Biermmanns <saschakb [at] gmail [dot] com>
 # Contributor: Jens Staal <staal1978 [at] gmail [dot] com>
-# Contributor: Daniel Leidisch <spam [at] leidisch [dot] net>
 
-pkgname=heirloom-sh-cvs
+pkgname=heirloom-pkgtools-cvs
 pkgver=2017.01.30
 pkgrel=1
-pkgdesc="A portable variant of the traditional Unix shell, implements the SVR4/SVID3 level of the shell."
 arch=('i686' 'x86_64')
-url="http://heirloom.sourceforge.net/sh.html"
+pkgdesc="SVR4 application packaging tools."
+url="http://heirloom.sourceforge.net/pkgtools.html"
 license=('custom:"caldera"' 'custom:"opensolaris"')
-depends=('glibc')
+depends=('heirloom-cvs' 'heirloom-devtools-cvs' 'heirloom-sh-cvs')
 makedepends=('cvs')
-provides=("${pkgname%-*}" "sh")
+provides=("${pkgname%-*}")
 conflicts=("${pkgname%-*}")
 source=('000-config.diff')
-sha512sums=('52417e869bc7c7646c8ef3d36a3376e86ea29e13ce03a521193d03db94fc6f9f7ccffae439d69212381ea47aec4cb96af1be3438571075911255ec3d5a304926')
+sha512sums=('c40c0776c71cf583f9940119158c6cbde74e29c5e733cb4eb58ebe70e75c651f7ee8def3af9435d0ecad4b8afe33632daac84e9361d23b816717e6bb67bc61cb')
+
+_hmake() {
+  env PATH="/opt/heirloom/bin:$PATH" MAKEFLAGS="" make "$@"
+}
 
 prepare() {
   cd ../
   cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom login
-  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom co -P heirloom-sh
+  cvs -d:pserver:anonymous:@heirloom.cvs.sourceforge.net:/cvsroot/heirloom co -P heirloom-pkgtools
   cd ${srcdir}
   [ -d "${pkgname%-*}" ] && rm -rf "${pkgname%-*}"
   [ -d "${pkgname%-*}" ] || cp -a ../"${pkgname%-*}" "${pkgname%-*}"
@@ -37,10 +40,11 @@ build() {
   cd "${pkgname%-*}"
   make
 }
-package() {    
+
+package() {
   cd "${pkgname%-*}"
-  make ROOT="${pkgdir}" install
-  install -Dm644 CALDERA.LICENSE "${pkgdir}"/usr/share/licenses/"${pkgname}"/CALDERA
-  install -m644 OPENSOLARIS.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/OPENSOLARIS
+  make install ROOT="${pkgdir}"
+  install -Dm0644 LICENSE/CALDERA.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/CALDERA
+  install -m0644 LICENSE/OPENSOLARIS.LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/OPENSOLARIS
 }
 
