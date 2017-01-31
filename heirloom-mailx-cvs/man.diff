@@ -1,13 +1,19 @@
 --- nail/mailx.1	2010-10-09 13:42:37.000000000 -0700
-+++ nail-patch/mailx.1	2017-01-30 10:22:10.057897733 -0800
-@@ -3574,8 +3574,8 @@
++++ nail-patch/mailx.1	2017-01-30 19:22:32.928683376 -0800
+@@ -3574,10 +3574,13 @@
  Only applicable if SSL/TLS support is built using OpenSSL.
  .TP
  .B ssl-method
 -Selects a SSL/TLS protocol version;
 -valid values are `ssl2', `ssl3', and `tls1'.
-+Selects SSL/TLS protocol, TLS can also stipulate version;
-+valid values are `ssl', `tls', `tls1', `tls1.1' and `tls1.2'.
++Selects SSL/TLS protocol, TLS must also stipulate version;
++valid values are `auto', `ssl', `tls1', `tls1.1' and `tls1.2'.
  If unset, the method is selected automatically,
- if possible.
+-if possible.
++if possible. Automatic negotiation of the highest
++mutually supported protocol and version requires
++OpenSSL 1.1.0 or newer. Older versions of OpenSSL
++default to TLS 1.2.
  .TP
+ \fBssl-method-\fIuser\fB@\fIhost\fR
+ Overrides

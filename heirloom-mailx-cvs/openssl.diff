@@ -1,5 +1,5 @@
 --- nail/openssl.c	2009-05-26 14:04:15.000000000 -0700
-+++ nail-patch/openssl.c	2017-01-30 14:43:55.530452393 -0800
++++ nail-patch/openssl.c	2017-01-30 19:12:07.341485651 -0800
 @@ -135,15 +135,18 @@
  	char *cp;
  	int state = 0;
@@ -11,7 +11,7 @@
 -				"entropy daemon at \"%s\" not available\n"),
 -					cp);
 +	#ifndef OPENSSL_NO_EGD
-+		else if ((cp = value("ssl-rand-egd")) != NULL) {
++		if ((cp = value("ssl-rand-egd")) != NULL) {
 +			cp = expand(cp);
 +			if (RAND_egd(cp) == -1) {
 +				fprintf(stderr, catgets(catd, CATSET, 245,
@@ -38,7 +38,7 @@
 +		if (equal(cp, "ssl"))
 +			method = SSLv23_client_method();
 +		#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-+			else if (equal(cp, "tls"))
++			else if (equal(cp, "auto"))
 +				method = TLS_client_method();
 +		#endif
  		else if (equal(cp, "tls1"))
