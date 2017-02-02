@@ -5,7 +5,7 @@
 pkgbase=ldc
 pkgname=("${pkgbase}" 'liblphobos')
 groups=('dlang' 'dlang-ldc')
-pkgver=1.1.0.beta3.r168.g1621bed1
+pkgver=1.1.0
 epoch=1
 pkgrel=1
 pkgdesc="D compiler based on the LLVM project including runtime and library."
@@ -14,22 +14,12 @@ url="https://github.com/ldc-developers/ldc"
 license=('BSD')
 depends=('libconfig')
 makedepends=('git' 'cmake' 'llvm' 'dmd')
-#source=("git+$url#tag=v${pkgver}")
-_commit=1621bed1f445c384167b440befabcc1079671088
-source=("git+$url#tag=$_commit"
+source=("git+$url#tag=v${pkgver}"
         "ldc2.conf"
        )
 sha256sums=('SKIP'
             '2ef3b1090e25187305f18ce6fbbbc45527dcbb33570afbe30e177790813948db'
            )
-
-pkgver() {
-  cd ldc
-  ( set -o pipefail
-    git describe --long 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-  )
-}
 
 build() {
   cd ldc
