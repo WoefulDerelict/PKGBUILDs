@@ -16,6 +16,8 @@
 * **ldc**: Updated description to build the current release as this actually compiles against the version of llvm currently distributed via the Arch Linux repository.
 * **lib32-networkmanager**: Recipe to package 32-bit compatibility libraries that closely mirrors the build provided by the package in Arch's Extra repository.
 * **lib32-libxpm**: 32-bit compatibility package based on the libxpm package from the Arch Linux Extra repository which includes verification of the source via a PGP signature. 
+* **libc++**: Updated description to match the current release of LLVM in Arch Linux's Extra repository.
+* **libc++abi**: Updated description to match the current release of LLVM in Arch Linux's Extra repository.
 * **libjson-rpc-cpp-git**: Modified AUR package description to include a more appropriate pkgver function and place the licence in a folder matching the package name.
 * **libpng12**: Mirror of the libpng12 package description from the Arch Linux Community repository modified for compatibility with legacy sources as well as binaries. **carla-git** uses this.
 * **lumina-desktop**: Tuned variant of the PKGBUILD in AUR that passes the compiler flags from makepkg.conf into qmake.
