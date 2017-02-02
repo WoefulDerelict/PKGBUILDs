@@ -1,0 +1,35 @@
+# Maintainer: Dicebot <public@dicebot.lv>
+
+pkgname=dstep
+pkgver=0.2.2.r139.gd3478da
+pkgrel=1
+pkgdesc="Automatic C header to D module translator"
+arch=('i686' 'x86_64')
+groups=('dlang')
+url="https://github.com/jacob-carlborg/dstep"
+license=('custom:"boost"')
+depends=('clang' 'liblphobos')
+makedepends=('git' 'dub' 'ldc' 'liblphobos')
+#source=("git+https://github.com/jacob-carlborg/dstep.git#tag=v${pkgver}")
+source=("git+https://github.com/jacob-carlborg/dstep.git"
+        "http://www.boost.org/LICENSE_1_0.txt")
+sha512sums=('SKIP'
+            'd6078467835dba8932314c1c1e945569a64b065474d7aced27c9a7acc391d52e9f234138ed9f1aa9cd576f25f12f557e0b733c14891d42c16ecdc4a7bd4d60b8')
+
+pkgver() {
+  cd "${pkgname}"
+  ( set -o pipefail
+    git describe --long --tags 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+build() {
+  cd "${pkgname}"
+  dub build -b release
+}
+
+package(){
+  install -Dm755 ${srcdir}/dstep/bin/dstep ${pkgdir}/usr/bin/dstep
+  install -Dm644 ${srcdir}/LICENSE_1_0.txt ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
