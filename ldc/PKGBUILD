@@ -1,25 +1,22 @@
-# $Id$
-# Maintainer: Mihails Strasuns <public@dicebot.lv>
+# Maintainer: Llewelyn Trahaearn <woefulderelict [at] gmail [dot] com>
+# Contributor: Mihails Strasuns <public@dicebot.lv>
 # Contributor: Sven-Hendrik Haase <sh@lutzhaase.com>
 
 pkgbase=ldc
-pkgname=("${pkgbase}" 'liblphobos')
-groups=('dlang' 'dlang-ldc')
+pkgname=("${pkgbase}" 'liblphobos' 'lib32-liblphobos')
 pkgver=1.1.0
-epoch=1
 pkgrel=1
+epoch=1
 pkgdesc="D compiler based on the LLVM project including runtime and library."
 arch=('i686' 'x86_64')
 url="https://github.com/ldc-developers/ldc"
 license=('BSD')
-depends=('libconfig')
-makedepends=('git' 'cmake' 'llvm' 'dmd')
+groups=('dlang' 'dlang-ldc')
+makedepends=('cmake' 'dmd' 'git' 'libconfig' 'llvm')
 source=("git+$url#tag=v${pkgver}"
-        "ldc2.conf"
-       )
+        "ldc2.conf")
 sha256sums=('SKIP'
-            '2ef3b1090e25187305f18ce6fbbbc45527dcbb33570afbe30e177790813948db'
-           )
+            '2ef3b1090e25187305f18ce6fbbbc45527dcbb33570afbe30e177790813948db')
 
 build() {
   cd ldc
@@ -31,12 +28,13 @@ build() {
   cd build
 
   cmake \
-  -DCMAKE_INSTALL_PREFIX=/usr \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_SKIP_RPATH=ON \
-  -DINCLUDE_INSTALL_DIR=/usr/include/dlang/ldc \
-  -DBUILD_SHARED_LIBS=ON \
-  ..
+    -DMULTILIB=ON \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DINCLUDE_INSTALL_DIR=/usr/include/dlang/ldc \
+    -DBUILD_SHARED_LIBS=ON \
+    ..
 
   make -j 4
   make install DESTDIR=$srcdir/install
@@ -45,8 +43,8 @@ build() {
 package_ldc() {
   pkgdesc="D compiler based on the LLVM project."
   depends=('liblphobos' 'libconfig')
-  backup=("etc/ldc2.conf")
   provides=("d-compiler")
+  backup=("etc/ldc2.conf")
 
   cd install
 
@@ -68,10 +66,10 @@ package_ldc() {
 
 package_liblphobos() {
   pkgdesc="Runtime and Phobos library for the LLVM based D compiler."
-  provides=("d-runtime" "d-stdlib")
-  replaces=("liblphobos-devel")
-  conflicts=("liblphobos-devel")
   depends=("curl")
+  provides=("d-runtime" "d-stdlib")
+  conflicts=("liblphobos-devel")
+  replaces=("liblphobos-devel")
 
   cd install
 
@@ -87,4 +85,21 @@ package_liblphobos() {
 
   # licenses
   install -D -m644 $srcdir/ldc/LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE    
+}
+
+package_lib32-liblphobos() {
+  pkgdesc="Runtime and Phobos library for the LLVM based D compiler. (32-bit)"
+  arch=('x86_64')
+  depends=('ldc' 'lib32-curl' 'lib32-gcc-libs')
+  provides=("d-runtime" "d-stdlib")
+  replaces=("lib32-liblphobos-devel")
+
+  # Libraries
+  install -D -m644 $srcdir/ldc/build/lib32/libphobos2-ldc.so $pkgdir/usr/lib32/liblphobos2.so
+  install -D -m644 $srcdir/ldc/build/lib32/libdruntime-ldc.so $pkgdir/usr/lib32/libldruntime.so
+  install -D -m644 $srcdir/ldc/build/lib32/libphobos2-ldc-debug.so $pkgdir/usr/lib32/liblphobos2-debug.so
+  install -D -m644 $srcdir/ldc/build/lib32/libdruntime-ldc-debug.so $pkgdir/usr/lib32/libldruntime-debug.so
+
+  # License
+  install -D -m644 "${srcdir}/ldc/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
