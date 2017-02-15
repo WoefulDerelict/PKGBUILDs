@@ -1,4 +1,4 @@
-# Maintainer: Llewelyn Trahaearn <WoefulDerelict at GMail dot com>
+# Maintainer: Llewelyn Trahaearn <WoefulDerelict [at] GMail [dot] com>
 # Contributor: Maxime Gauduin <alucryd@archlinux.org>
 # Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 # Contributor: Jan de Groot <jgc@archlinxu.org>
@@ -9,7 +9,7 @@
 
 pkgbase=lib32-networkmanager
 pkgname=(lib32-libnm lib32-libnm-glib)
-pkgver=1.6.0
+pkgver=1.6.2
 pkgrel=1
 pkgdesc="NetworkManager client libraries (32-bit)"
 arch=(x86_64)
@@ -22,7 +22,7 @@ makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool ip
              lib32-systemd lib32-util-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
              rp-pppoe vala wpa_supplicant)
 checkdepends=(libx11 python-dbus)
-_commit=2554a8736d41e1091fb69a796a126f818873449b  # tags/1.6.0^0
+_commit=037a12f96eff09aa48481fda7ea602a3388afc74  # tags/1.6.2^0
 source=("git+https://anongit.freedesktop.org/git/NetworkManager/NetworkManager#commit=$_commit")
 sha256sums=('SKIP')
 
