@@ -12,7 +12,7 @@ arch=('i686' 'x86_64')
 url="https://github.com/ldc-developers/ldc"
 license=('BSD')
 groups=('dlang' 'dlang-ldc')
-makedepends=('cmake' 'curl' 'dmd' 'libconfig' 'lib32-curl' 'lib32-gcc-libs' 'llvm' 'llvm-libs')
+makedepends=('cmake' 'dmd' 'libconfig' 'lib32-curl' 'lib32-gcc-libs' 'llvm')
 source=("$url/releases/download/v${pkgver}/ldc-${pkgver}-src.tar.gz"
         "ldc2.conf")
 sha256sums=('3b95216cd664e140dca321a6364c2238c442c972d6ccca8b9a65cb02d2e47112'
