@@ -105,7 +105,7 @@ package() {
   find ${pkgdir}/usr/lib32 -type f -name '*.prl' \
     -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  rm -rf "${pkgdir}"/usr/{share,bin,tests}
+  rm -rf "${pkgdir}"/usr/{bin,include,lib,share}
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s ${pkgname#lib32-} "$pkgdir/usr/share/licenses/$pkgname"
 }
