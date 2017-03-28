@@ -27,7 +27,7 @@
  		cp = expand(cp);
  		if (RAND_load_file(cp, 1024) == -1) {
  			fprintf(stderr, catgets(catd, CATSET, 246,
-@@ -216,19 +219,33 @@
+@@ -216,19 +219,23 @@
  
  	cp = ssl_method_string(uhp);
  	if (cp != NULL) {
@@ -37,10 +37,8 @@
 -			method = SSLv3_client_method();
 +		if (equal(cp, "ssl"))
 +			method = SSLv23_client_method();
-+		#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-+			else if (equal(cp, "auto"))
-+				method = TLS_client_method();
-+		#endif
++		else if (equal(cp, "auto"))
++			method = TLS_client_method();
  		else if (equal(cp, "tls1"))
  			method = TLSv1_client_method();
 +		else if (equal(cp, "tls1.1"))
@@ -51,19 +49,11 @@
  			fprintf(stderr, catgets(catd, CATSET, 244,
  					"Invalid SSL method \"%s\"\n"), cp);
 -			method = SSLv23_client_method();
-+			#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-+				method = TLS_client_method();
-+			#else
-+				method = TLSv1_2_client_method();
-+			#endif
++			method = TLS_client_method();
  		}
  	} else
 -		method = SSLv23_client_method();
-+		#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-+			method = TLS_client_method();
-+		#else
-+			method = TLSv1_2_client_method();
-+		#endif
++		method = TLS_client_method();
  	return method;
  }
  

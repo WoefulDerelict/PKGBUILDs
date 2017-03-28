@@ -2,7 +2,7 @@
 # Contributor: aksr <aksr [at] t-com [dot] me>
 
 pkgname=heirloom-mailx-cvs
-pkgver=2017.01.30
+pkgver=2017.03.28
 pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc="A mail user agent for Unix systems."
@@ -14,8 +14,8 @@ provides=("${pkgname%-*}")
 conflicts=("${pkgname%-*}")
 source=('makefile.patch' 'man.diff' 'openssl.diff')
 sha512sums=('dc999ad9a6c5e8da49a93dcff92aa76e6505f607bb5ee646c38e69fa7cdc23eb51b67666e9d0f1cda343ca031cb6425308315fefb9466d716ddb7d2470834d89'
-            'f3f1846d1aae3e957d3d635589173722fd6966f35962d356e40e3a0595ceaa2145659a2dde478c79a3768ea110f4a28946b7e55cbc4c148a188583208b7ecc0a'
-            '055e8dffce986d0070ad36c34448e18efe1d7ce9319724880527b7daca90b2f260a0fb90de1d206049651e4c7790fc692c3008fc2d08c9a71528e87be27f811a')
+            '2d82ec2a2798541ccc890884f209a56a6e7adad0ebbdc806428a5fceda8d260aeaf679cf7218f65d2bf47178006a6569c05879b66cf2ae80197db890b3f88793'
+            '91862fb0d6a92ab1cb03c5aea73cf9cec875b59f555719d1d3064599d95411eb2c2d9f432d153ff2772384f659bafecce2c97c2569c83a30f3b31717fd80084d')
 
 prepare() {
   cd ../
