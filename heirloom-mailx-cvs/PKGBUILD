@@ -8,7 +8,7 @@ arch=('i686' 'x86_64')
 pkgdesc="A mail user agent for Unix systems."
 url="http://heirloom.sourceforge.net/mailx.html"
 license=('custom')
-depends=('heirloom-cvs' 'krb5' 'openssl')
+depends=('heirloom-cvs' 'krb5' 'openssl>=1.1.0')
 makedepends=('cvs')
 provides=("${pkgname%-*}")
 conflicts=("${pkgname%-*}")
