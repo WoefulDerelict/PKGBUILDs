@@ -9,7 +9,7 @@
 
 pkgbase=lib32-networkmanager
 pkgname=(lib32-libnm lib32-libnm-glib)
-pkgver=1.6.2
+pkgver=1.8rc3+10+gddd6f94ab
 pkgrel=1
 pkgdesc="NetworkManager client libraries (32-bit)"
 arch=(x86_64)
@@ -22,7 +22,7 @@ makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool ip
              lib32-systemd lib32-util-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
              rp-pppoe vala wpa_supplicant)
 checkdepends=(libx11 python-dbus)
-_commit=037a12f96eff09aa48481fda7ea602a3388afc74  # tags/1.6.2^0
+_commit=ddd6f94ab70eae875641ab593e17326acf65644c  # nm-1-8
 source=("git+https://anongit.freedesktop.org/git/NetworkManager/NetworkManager#commit=$_commit")
 sha256sums=('SKIP')
 
@@ -35,7 +35,7 @@ prepare() {
 
 pkgver() {
   cd NetworkManager
-  git describe | sed 's/-dev/dev/;s/-/+/g'
+  git describe | sed 's/-dev/dev/;s/-rc/rc/;s/-/+/g'
 }
 
 build() {
@@ -140,7 +140,7 @@ check() {
 
 package_lib32-libnm() {
   pkgdesc="NetworkManager client library (32-bit)"
-  depends=(lib32-glib2 lib32-jansson lib32-libgudev lib32-nss lib32-util-linux libnm)
+  depends=(lib32-curl lib32-glib2 lib32-jansson lib32-libgudev lib32-nss lib32-util-linux libnm)
 
   mv libnm/* "$pkgdir"
 }

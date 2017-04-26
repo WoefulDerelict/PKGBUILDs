@@ -4,7 +4,7 @@
 
 pkgbase=ldc
 pkgname=("${pkgbase}" 'liblphobos' 'lib32-liblphobos')
-pkgver=1.1.1
+pkgver=1.2.0
 pkgrel=1
 epoch=1
 pkgdesc="D compiler based on the LLVM project including runtime and library."
@@ -15,7 +15,7 @@ groups=('dlang' 'dlang-ldc')
 makedepends=('cmake' 'dmd' 'libconfig' 'lib32-curl' 'lib32-gcc-libs' 'llvm')
 source=("$url/releases/download/v${pkgver}/ldc-${pkgver}-src.tar.gz"
         "ldc2.conf")
-sha256sums=('3d35253a76288a78939fea467409462f0b87461ffb89550eb0d9958e59eb7e97'
+sha256sums=('910e8a670f0fadcaf64403c924091d6debf7ad29e203808f5f2b6899217e6f2b'
             '2ef3b1090e25187305f18ce6fbbbc45527dcbb33570afbe30e177790813948db')
 
 build() {
