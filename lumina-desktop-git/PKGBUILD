@@ -29,7 +29,6 @@ _branch=master
 prepare() {
   cd $_dirname
   git checkout ${_branch}
-  git pull
 }
 
 pkgver() {
@@ -46,7 +45,7 @@ build() {
   qmake-qt5 PREFIX="/usr" \
             QT5LIBDIR=/usr/lib/qt \
             QMAKE_CFLAGS_ISYSTEM= \
-            QMAKE_CFLAGS_RELEASE="${CFLAGS}"\
+            QMAKE_CFLAGS_RELEASE="${CFLAGS}" \
             QMAKE_CXXFLAGS_RELEASE="${CXXFLAGS}"
 
   make

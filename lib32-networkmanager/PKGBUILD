@@ -17,7 +17,7 @@ license=(GPL2 LGPL2.1)
 url="https://wiki.gnome.org/Projects/NetworkManager"
 _pppver=2.4.7
 makedepends=(dhclient gcc-multilib git gobject-introspection gtk-doc intltool iproute2 iptables
-             lib32-bluez-libs lib32-dbus-glib lib32-jansson lib32-libgudev lib32-libmm-glib
+             lib32-bluez-libs lib32-curl lib32-dbus-glib lib32-jansson lib32-libgudev lib32-libmm-glib
              lib32-libndp lib32-libnewt lib32-nss lib32-libsoup lib32-libteam lib32-polkit 
              lib32-systemd lib32-util-linux modemmanager perl-yaml "ppp=$_pppver" python-gobject
              rp-pppoe vala wpa_supplicant)
