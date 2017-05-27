@@ -1,0 +1,88 @@
+# Maintainer: Juan Perez <gatitofeliz [at] protonmail [dot] com>
+# Contributor: Llewelyn Trahaearn <woefulderelict [at] gmail [dot] com>
+# Contributor: Andrea Scarpino <andrea [at] archlinux [dot] org>
+
+pkgname=qtwebkit
+pkgver=2.3.4
+pkgrel=6
+pkgdesc='An open source web browser engine (Qt4 port)'
+arch=('i686' 'x86_64')
+url='http://trac.webkit.org/wiki/QtWebKit'
+license=('LGPL2.1' 'GPL3')
+depends=('qt4' 'systemd' 'gst-plugins-base-libs')
+makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
+conflicts=('qt<4.8')
+_qtver=4.8.7
+source=("https://sources.archlinux.org/other/packages/${pkgname}/${pkgname}-${pkgver}.tar.xz"
+        "http://download.qt-project.org/official_releases/qt/4.8/${_qtver}/qt-everywhere-opensource-src-${_qtver}.tar.gz"
+        'use-python2.patch'
+        'qtwebkit-gcc5.patch'
+        'fix-execinfo.patch'
+        'fix-mallinfo.patch'
+        'fix-saturated_arithmetic.patch'
+        'qwebview.patch')
+sha256sums=('e9bd687ec72790eeff00a4a7c034a4c7cf836761a325e2e14faf9975c49e5eb7'
+            'e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0'
+            'f6df647d14398e59dd0be498016122b7dd74f56b0a61d53de452d86ed8f150d0'
+            '899082be529770856fc83e6e94c62f6109e36840f4bec79e476c39b5faca7781'
+            '55f0e16d9213237d84adb8facc9ad12b8c56494912559f9239bb9b462856fcf8'
+            '204dd742f01a30e95410be20cd32ba846a64d1f0a4b003a10ac4e1e1e23e431b'
+            '448a420de51d24759174b004bf5b50bd77fe496be888b0e770259e1a6782bc10'
+            'f040a4eecd0c5643a7cf2ee5da6636fc7348702972d654b242c04c87a995193b')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  patch -p1 -i "${srcdir}"/use-python2.patch
+
+  # Fix build with GCC ≥ 5, private browsing and rpath derp (LFS/Fedora)
+  patch -p1 -i "$srcdir"/qtwebkit-gcc5.patch
+  
+  # Include patches from Void Linux to fix additional issues and appease GCC 6.
+  patch -p1 -i "$srcdir"/fix-execinfo.patch
+  patch -p1 -i "$srcdir"/fix-mallinfo.patch
+  patch -p1 -i "$srcdir"/fix-saturated_arithmetic.patch
+  
+  cd ../qt-everywhere-opensource-src-${_qtver}
+  patch -p1 -i "${srcdir}"/qwebview.patch
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  OPTS="--no-webkit2"
+  if [ "${CARCH}" = "i686" ]; then
+      # FS#33418
+      OPTS="${OPTS} --no-force-sse2"
+  fi
+
+  export CXXFLAGS+=" -std=gnu++98" # Mirror QT4
+  export QTDIR=/usr
+  export PATH="/usr/lib/qt4/bin:$PATH"
+  Tools/Scripts/build-webkit --qt --release \
+    --makeargs="${MAKEFLAGS}" \
+    --prefix=/usr \
+    --qmakearg="QMAKE_CFLAGS_ISYSTEM= " \
+    --qmakearg="QMAKE_CFLAGS_RELEASE='$CFLAGS'" \
+    --qmakearg="QMAKE_CXXFLAGS_RELEASE='$CXXFLAGS'" \
+    --qmakearg="QMAKE_LFLAGS_RELEASE='$LDFLAGS'" \
+    ${OPTS}
+
+  # Build the QWebView plugin (FS#27914)
+  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
+  qmake-qt4 QMAKE_CFLAGS_ISYSTEM= \
+            QMAKE_CFLAGS_RELEASE="${CFLAGS}" \
+            QMAKE_CXXFLAGS_RELEASE="${CXXFLAGS}" \
+            QMAKE_LFLAGS_RELEASE="${LDFLAGS}"
+  make
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  make INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
+
+  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
+  make INSTALL_ROOT="${pkgdir}" install
+
+  # Fix wrong path in prl file
+  sed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' "${pkgdir}"/usr/lib/libQtWebKit.prl
+}
